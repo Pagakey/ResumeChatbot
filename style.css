@@ -1,0 +1,94 @@
+#greeting{
+    font-size: 34px;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    text-align: center;
+    color: aqua;
+}
+
+body{
+    display: flow;
+    justify-content: center;
+    align-items: center;
+    background: url(StockSnap_UOTSJVB9HM.jpg);
+}
+
+#input_window {
+    width: 100%;
+    padding-right: 80px; /* Space for the button */
+    height: 45px;
+    border-radius: 15px;
+    padding-left: 10px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.input_group {
+    position: relative;
+    width: 100%;
+    max-width: 780px;
+}
+
+#send_button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 70px;
+    border: none;
+    border-radius: 0 15px 15px 0;
+    background-color: #008080;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#conversation{
+    flex: 1;
+    width: 100%;
+    overflow-y: auto;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.message {
+    padding: 10px 15px;
+    border-radius: 15px;
+    max-width: 70%;
+    word-wrap: break-word;
+    margin-bottom: 8px;
+}
+
+.user-message{
+    background-color: #007bff;
+    color: white;
+    align-self: flex-end;
+    margin-left: auto;
+}
+
+.bot-message{
+    background-color: #f1f1f1;
+    color: black;
+    align-self: flex-start;
+    margin-right: auto;
+}
+
+.conversation_container {
+    position: relative;
+    margin: auto;
+    width: 800px;
+    height: 750px;
+    background: transparent;
+    border: 2px solid rgba(255,255,255, .5);
+    border-radius: 15px;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 0 30px rgba(0,0,0, .5);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 20px;
+}
