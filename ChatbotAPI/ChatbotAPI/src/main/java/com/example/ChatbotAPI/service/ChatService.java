@@ -1,3 +1,4 @@
+
 package com.example.ChatbotAPI.service;
 
 import org.springframework.stereotype.Service;
@@ -33,38 +34,48 @@ public class ChatService {
 
     private final List<KnowledgeEntry> knowledgeBase = new ArrayList<>();
 
-
     // In case of multiple matches where the question "what languages do you know"
     // can refer to programming languages but also natural/speaking languages,
     // the bot should be able to match all entries appropriate and return a combined response.
     public String processMessage(String user_input) {
         String lowerInput = user_input.toLowerCase();
-        List<KnowledgeEntry> bestMatches = new ArrayList<>();
+        List<KnowledgeEntry> relevantMatches = new ArrayList<>();
         int highestScore = 0;
 
-        // Find all entries with the highest match score
+        // Find all entries and their match scores
         for (KnowledgeEntry entry : knowledgeBase) {
             int matchCount = countMatches(lowerInput, entry.getKeywords());
-            if (matchCount > highestScore) {
-                highestScore = matchCount;
-                bestMatches.clear();
-                bestMatches.add(entry);
-            } else if (matchCount == highestScore && matchCount > 0) {
-                bestMatches.add(entry);
+            //System.out.println("Word: " + lowerInput + " Count: " + matchCount + " in knowledge base: " + knowledgeBase.indexOf(entry));
+
+            if (matchCount > 0) {
+                if (matchCount > highestScore) {
+                    highestScore = matchCount;
+                }
             }
         }
 
-        if (!bestMatches.isEmpty()) {
-            if (bestMatches.size() == 1) {
-                // Single best match
-                return bestMatches.get(0).getResponse();
+        // Collect all responses that meet the relevance threshold
+        // Include responses with at least 50% of the highest score, minimum of 1 match
+        int threshold = Math.max(1, highestScore / 2);
+
+        for (KnowledgeEntry entry : knowledgeBase) {
+            int matchCount = countMatches(lowerInput, entry.getKeywords());
+            if (matchCount >= threshold) {
+                relevantMatches.add(entry);
+            }
+        }
+
+        if (!relevantMatches.isEmpty()) {
+            if (relevantMatches.size() == 1) {
+                // Single relevant response
+                return relevantMatches.get(0).getResponse();
             } else {
-                // If multiple keywords match, combine responses
+                // Multiple relevant responses -> combine them
                 StringBuilder combinedResponse = new StringBuilder();
-                for (int i = 0; i < bestMatches.size(); i++) {
-                    combinedResponse.append(bestMatches.get(i).getResponse());
-                    if (i < bestMatches.size() - 1) {
-                        combinedResponse.append("\nAlso, ");
+                for (int i = 0; i < relevantMatches.size(); i++) {
+                    combinedResponse.append(relevantMatches.get(i).getResponse());
+                    if (i < relevantMatches.size() - 1) {
+                        combinedResponse.append("<br>Also, ");
                     }
                 }
                 return combinedResponse.toString();
@@ -74,10 +85,12 @@ public class ChatService {
         }
     }
 
+    // Bidirectional(?) matching for flexibility (simulates word "similarity"
     private int countMatches(String lowerInput, String[] keywords) {
         int count = 0;
         for (String keyword : keywords) {
-            if (lowerInput.contains(keyword.toLowerCase())) {
+            String lowerKeyword = keyword.toLowerCase();
+            if (lowerInput.contains(lowerKeyword) || lowerKeyword.contains(lowerInput)) {
                 count++;
             }
         }
@@ -85,49 +98,33 @@ public class ChatService {
     }
 
     public ChatService() {
-        // Add each knowledge entry from your JavaScript knowledge base
         knowledgeBase.add(new KnowledgeEntry(
-                new String[]{"programming languages", "coding", "languages you know", "skills in programming"},
+                new String[]{"programming languages", "coding", "languages you know", "skills in programming","program","C","C++","Java","Python"},
                 "I have strong foundations in multiple programming languages including C, C++, Java, and Python."
         ));
-
+        //backend development
         knowledgeBase.add(new KnowledgeEntry(
-                new String[]{"backend", "server-side", "back-end development"},
+                new String[]{"backend", "server-side", "backend development","web development","sites"},
                 "I am passionate about backend development and have a proven ability to master complex technical concepts through self-directed learning."
         ));
-
+        //education, studies
         knowledgeBase.add(new KnowledgeEntry(
-                new String[]{"university", "studies", "where do you study", "education"},
+                new String[]{"university", "studies", "study", "education","computer", "science" ,"department"},
                 "I am a fourth-year Computer Science student at the University of Crete."
         ));
-
+        //projects
         knowledgeBase.add(new KnowledgeEntry(
-                new String[]{"github", "projects", "project", "code samples"},
-                "You can check out my personal projects at github.com/Pagakey/Projects."
-        ));
-
-        knowledgeBase.add(new KnowledgeEntry(
-                new String[]{"soft skills", "core", "skills you have"},
-                "I am defined by my logical reasoning, problem solving abilities, and collaborative mindset."
-        ));
-
-        knowledgeBase.add(new KnowledgeEntry(
-                new String[]{"vr", "virtual reality", "vr testing"},
-                "I have conducted basic VR testing for OramaVR in FORTH, identifying bugs related to user experience and Unity performance."
-        ));
-
-        knowledgeBase.add(new KnowledgeEntry(
-                new String[]{"hackathon", "hackathons", "hackathon experience", "competitions", "achievements"},
+                new String[]{"hackathon", "hackathon experience", "competitions", "achievements","hack", "CTF","capture the flag"},
                 "I achieved 17th place among 70 teams in 'Hellenic University Hack 2024' CTF competition as a key member of a 5-person team."
         ));
 
         knowledgeBase.add(new KnowledgeEntry(
-                new String[]{"linux", "linux experience", "linux skills"},
+                new String[]{"linux", "linux experience", "linux skills","command line", "cmd", "command prompt", "wsl","subsystem"},
                 "I have ease of use with Linux and command line environments."
         ));
 
         knowledgeBase.add(new KnowledgeEntry(
-                new String[]{"languages", "languages you speak", "real life languages you know", "foreign languages"},
+                new String[]{"languages", "languages you speak", "foreign", "native", "English","Greek","slang"},
                 "I speak Greek natively and have a B2 English level (Michigan ECCE)."
         ));
 
@@ -135,5 +132,20 @@ public class ChatService {
                 new String[]{"interests", "hobbies", "free time", "hustles", "life", "personal"},
                 "My hobbies include playing piano, sim racing, PC building, and participating in Capture the Flag challenges."
         ));
+        knowledgeBase.add(new KnowledgeEntry(
+                new String[]{"github", "projects", "code samples"},
+                "You can check out my personal projects at github.com/Pagakey/Projects."
+        ));
+
+        knowledgeBase.add(new KnowledgeEntry(
+                new String[]{"soft skills", "core", "skills you have","character", "abilities", "mindset","logic","brain","work"},
+                "I am defined by my logical reasoning, problem solving abilities, and collaborative mindset."
+        ));
+
+        knowledgeBase.add(new KnowledgeEntry(
+                new String[]{"vr", "virtual reality", "vr testing","testing","FORTH","Orama","Unity"},
+                "I have conducted basic VR testing for OramaVR in FORTH, identifying bugs related to user experience and Unity performance."
+        ));
+
     }
 }

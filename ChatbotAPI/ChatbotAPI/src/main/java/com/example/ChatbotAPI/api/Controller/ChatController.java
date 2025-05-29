@@ -1,6 +1,31 @@
 package com.example.ChatbotAPI.api.Controller;
 
+import com.example.ChatbotAPI.api.Model.ChatRequest;
+import com.example.ChatbotAPI.api.Model.ChatResponse;
+import com.example.ChatbotAPI.service.ChatService;
+import org.springframework.web.bind.annotation.*;
 
-//handles http requests
+@RestController
+@RequestMapping("/api")
+@CrossOrigin(origins = "*")
 public class ChatController {
+
+    private final ChatService chatService;
+
+    // Constructor injection for ChatService
+    public ChatController(ChatService chatService) {
+        this.chatService = chatService;
+    }
+
+    @PostMapping("/chat")
+    public ChatResponse chat(@RequestBody ChatRequest request) {
+        System.out.println("Received request: " + request.getUserInput()); // Add this line
+
+        String userInput = request.getUserInput();
+        String botResponse = chatService.processMessage(userInput);
+
+        System.out.println("Sending response: " + botResponse); // Add this line
+
+        return new ChatResponse(botResponse);
+    }
 }

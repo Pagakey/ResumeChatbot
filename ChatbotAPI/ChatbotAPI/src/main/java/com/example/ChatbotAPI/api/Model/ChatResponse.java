@@ -1,9 +1,17 @@
 package com.example.ChatbotAPI.api.Model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 //will be sending data back to frontend
 public class ChatResponse {
+    // Tells Spring Boot to use exactly chat_response as the JSON filed name
+    // instead of converting getChatResponse() to chatResponse.
+    @JsonProperty("chat_response")
     private String chat_response;
+
+    // Default constructor (good practice)
+    public ChatResponse() {
+    }
 
     public String getChatResponse() {
         return chat_response;
