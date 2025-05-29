@@ -5,12 +5,11 @@
     text-align: center;
     color: aqua;
 }
-
 body{
     display: flow;
     justify-content: center;
     align-items: center;
-    background: url(StockSnap_UOTSJVB9HM.jpg);
+    background: url(../images/StockSnap_UOTSJVB9HM.jpg);
 }
 
 #input_window {
