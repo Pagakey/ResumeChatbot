@@ -19,12 +19,13 @@ public class ChatController {
 
     @PostMapping("/chat")
     public ChatResponse chat(@RequestBody ChatRequest request) {
-        System.out.println("Received request: " + request.getUserInput()); // Add this line
+        //debugging
+        //System.out.println("Received request: " + request.getUserInput());
 
         String userInput = request.getUserInput();
         String botResponse = chatService.processMessage(userInput);
-
-        System.out.println("Sending response: " + botResponse); // Add this line
+        //debugging
+        //System.out.println("Sending response: " + botResponse); //
 
         return new ChatResponse(botResponse);
     }

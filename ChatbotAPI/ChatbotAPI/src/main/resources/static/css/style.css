@@ -1,6 +1,6 @@
 #greeting{
     font-size: 34px;
-    font-family: 'Courier New', Courier, monospace;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-weight: bold;
     text-align: center;
     color: aqua;
@@ -92,6 +92,7 @@ body{
     padding: 20px;
 }
 
+/*magic*/
 .typing-indicator {
     opacity: 0.7;
     font-style: italic;

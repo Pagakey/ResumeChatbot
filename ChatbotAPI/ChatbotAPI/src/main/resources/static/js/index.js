@@ -8,7 +8,7 @@ function SendPrompt() {
     // Don't send empty messages
     if (!userMessage) return;
 
-    // Add user message to chat
+    // Add User's message to chat
     conversation.innerHTML += "<div class='message user-message'>" + userMessage + "</div>";
 
     // Clear input and disable controls
@@ -17,14 +17,13 @@ function SendPrompt() {
     sendButton.disabled = true;
     sendButton.innerHTML = "...";
 
-    // Add typing indicator
+    // Add typing indicator/animation
     const typingIndicator = "<div class='message bot-message typing-indicator' id='typing'>Thinking...</div>";
     conversation.innerHTML += typingIndicator;
 
-    // Scroll to bottom
     conversation.scrollTop = conversation.scrollHeight;
 
-    // Add 2-second delay to show the waiting/typing effect
+    // 2-second delay to show the waiting/typing effect
     setTimeout(() => {
         // Send request to backend
         fetch('/api/chat', {
@@ -52,7 +51,6 @@ function SendPrompt() {
                 // Add chatbot's response to chat
                 conversation.innerHTML += "<div class='message bot-message'>" + data.chat_response + "</div>";
 
-                // Scroll to bottom
                 conversation.scrollTop = conversation.scrollHeight;
             })
             .catch(error => {
@@ -68,7 +66,7 @@ function SendPrompt() {
                 conversation.innerHTML += "<div class='message bot-message'>I'm just a bot 👉👈</div>";
             })
             .finally(() => {
-                // Re-enable controls regardless of success or failure
+                // Re-enable controls
                 inputWindow.disabled = false;
                 sendButton.disabled = false;
                 sendButton.innerHTML = "Send";

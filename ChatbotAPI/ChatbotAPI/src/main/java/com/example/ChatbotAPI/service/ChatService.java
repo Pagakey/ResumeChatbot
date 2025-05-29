@@ -45,6 +45,7 @@ public class ChatService {
         // Find all entries and their match scores
         for (KnowledgeEntry entry : knowledgeBase) {
             int matchCount = countMatches(lowerInput, entry.getKeywords());
+            //debugging
             //System.out.println("Word: " + lowerInput + " Count: " + matchCount + " in knowledge base: " + knowledgeBase.indexOf(entry));
 
             if (matchCount > 0) {
